@@ -30,7 +30,8 @@ app.add_middleware(
 )
 
 # ---------------- DATABASE SETUP ----------------
-MONGO_URI = "mongodb+srv://dua_db:260104@voca-diary-server.xmit145.mongodb.net/vocadiary?retryWrites=true&w=majority"
+# MONGO_URI = "mongodb+srv://dua_db:260104@voca-diary-server.xmit145.mongodb.net/vocadiary?retryWrites=true&w=majority"
+MONGO_URI = "mongodb://localhost:27017"  # Local MongoDB URI for development
 client = AsyncIOMotorClient(MONGO_URI)
 db = client["voca-diary"]   # database name
 collection = db["entries"]  # collection name
@@ -142,12 +143,19 @@ async def start_recording(request: RecordingRequest):
             "sentiment": sentiment,
             "timestamp": datetime.utcnow()
         }
-        await collection.insert_one(entry)
+        result = await collection.insert_one(entry)
 
         # Clean up the temporary file
         os.remove(audio_file)
         
-        return entry
+        # Return entry without ObjectId for JSON serialization
+        return {
+            "transcript": transcript,
+            "summary": summary,
+            "sentiment": sentiment,
+            "timestamp": entry["timestamp"].isoformat(),
+            "id": str(result.inserted_id)
+        }
     except Exception as e:
         return JSONResponse(
             status_code=500,
@@ -177,8 +185,15 @@ async def analyze_audio(file: UploadFile = File(...)):
             "sentiment": sentiment,
             "timestamp": datetime.utcnow()
         }
-        await collection.insert_one(entry)
+        result = await collection.insert_one(entry)
 
-        return entry
+        # Return entry without ObjectId for JSON serialization
+        return {
+            "transcript": transcript,
+            "summary": summary,
+            "sentiment": sentiment,
+            "timestamp": entry["timestamp"].isoformat(),
+            "id": str(result.inserted_id)
+        }
     except Exception as e:
         return {"transcript": f"Error processing audio: {e}", "summary": "", "sentiment": ""}
