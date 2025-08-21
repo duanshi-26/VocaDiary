@@ -1,0 +1,11 @@
+fastapi
+nltk
+textblob
+uvicorn
+pyaudio
+SpeechRecognition
+pydub
+sumy
+motor
+python-multipart
+numpy   

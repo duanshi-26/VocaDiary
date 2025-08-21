@@ -143,6 +143,7 @@ async def start_recording(request: RecordingRequest):
             "timestamp": datetime.utcnow()
         }
         result = await collection.insert_one(entry)
+        result = await collection.insert_one(entry)
 
         # Clean up the temporary file
         os.remove(audio_file)
@@ -183,6 +184,7 @@ async def analyze_audio(file: UploadFile = File(...)):
             "sentiment": sentiment,
             "timestamp": datetime.utcnow()
         }
+        result = await collection.insert_one(entry)
         result = await collection.insert_one(entry)
 
 
