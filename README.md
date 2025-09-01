@@ -1,7 +1,3 @@
-perfect 👌 ab mujhe tumhare diya hua detail mil gaya — ab main tumhare **VocaDiary** repo ke liye ek **creative, detailed aur recruiter-friendly README** bana ke deta hoon. Ye ready-to-paste `README.md` hai:
-
----
-
 # 🎙️ VocaDiary
 
 > *“Your voice. Your mood. Your diary.”*
